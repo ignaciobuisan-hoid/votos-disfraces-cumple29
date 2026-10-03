@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Votá el disfraz 🎉 29° Cumple</title>
+<meta name="theme-color" content="#7b2fd6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rosa:#ff2d95;
+    --violeta:#7b2fd6;
+    --amarillo:#ffd400;
+    --celeste:#19b6e8;
+    --verde:#4dd14d;
+    --fondo:#fff7ec;
+    --texto:#2b1a4a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100dvh;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    color:var(--texto);
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255,45,149,.22) 0 10px, transparent 11px),
+      radial-gradient(circle at 85% 12%, rgba(25,182,232,.22) 0 8px, transparent 9px),
+      radial-gradient(circle at 70% 85%, rgba(255,212,0,.28) 0 9px, transparent 10px),
+      radial-gradient(circle at 20% 80%, rgba(123,47,214,.2) 0 8px, transparent 9px),
+      radial-gradient(circle at 92% 60%, rgba(77,209,77,.22) 0 7px, transparent 8px),
+      radial-gradient(circle at 45% 6%, rgba(255,45,149,.18) 0 6px, transparent 7px),
+      radial-gradient(circle at 55% 95%, rgba(25,182,232,.18) 0 6px, transparent 7px),
+      var(--fondo);
+    background-size: 160px 160px, 180px 180px, 150px 150px, 170px 170px, 190px 190px, 140px 140px, 160px 160px, auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+  }
+  .tarjeta{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:28px;
+    border:5px solid var(--violeta);
+    box-shadow:0 14px 0 rgba(123,47,214,.18), 0 20px 40px rgba(43,26,74,.15);
+    padding:28px 22px 32px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .tarjeta::before{
+    content:"";
+    position:absolute;
+    top:-40px; left:-40px; right:-40px;
+    height:90px;
+    background:linear-gradient(120deg, var(--rosa), var(--violeta), var(--celeste));
+    transform:rotate(-3deg);
+    z-index:0;
+  }
+  .contenido{position:relative; z-index:1;}
+  .emoji-top{font-size:38px; line-height:1; margin-bottom:4px; display:block;}
+  h1{
+    font-size:clamp(26px, 8vw, 34px);
+    line-height:1.05;
+    margin:0 0 2px;
+    font-weight:800;
+    background:linear-gradient(90deg, var(--rosa), var(--violeta) 45%, var(--celeste));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:.5px;
+  }
+  .subt{
+    font-size:15px;
+    font-weight:700;
+    color:var(--violeta);
+    background:var(--amarillo);
+    display:inline-block;
+    padding:4px 14px;
+    border-radius:999px;
+    margin:10px 0 18px;
+    transform:rotate(-1deg);
+  }
+  p.lead{
+    font-size:16px;
+    font-weight:600;
+    margin:0 0 18px;
+    color:var(--texto);
+  }
+  form{display:flex; flex-direction:column; gap:10px;}
+  textarea{
+    width:100%;
+    min-height:64px;
+    resize:none;
+    font-family:inherit;
+    font-size:17px;
+    font-weight:600;
+    color:var(--texto);
+    border:3px solid #e5d8ff;
+    border-radius:16px;
+    padding:14px;
+    outline:none;
+    background:#fbf8ff;
+    transition:border-color .15s;
+  }
+  textarea:focus{border-color:var(--violeta);}
+  .contador{
+    text-align:right;
+    font-size:12px;
+    font-weight:700;
+    color:#9a8bbf;
+    margin-top:-4px;
+  }
+  button{
+    font-family:inherit;
+    font-size:19px;
+    font-weight:800;
+    color:#fff;
+    border:none;
+    border-radius:16px;
+    padding:15px;
+    background:linear-gradient(90deg, var(--rosa), var(--violeta));
+    box-shadow:0 6px 0 #5a1fa0;
+    cursor:pointer;
+    margin-top:6px;
+    transition:transform .08s, box-shadow .08s;
+  }
+  button:active{transform:translateY(4px); box-shadow:0 2px 0 #5a1fa0;}
+  button:disabled{opacity:.6; cursor:default; transform:none; box-shadow:0 6px 0 #5a1fa0;}
+  .mensaje-error{
+    display:none;
+    background:#fff0e8;
+    border:2px solid #ff8a4c;
+    color:#b4451a;
+    font-weight:700;
+    font-size:14px;
+    border-radius:12px;
+    padding:10px 12px;
+    margin-top:8px;
+  }
+  .mensaje-error.visible{display:block;}
+  .pantalla{display:none;}
+  .pantalla.activa{display:block;}
+  .gracias-emoji{font-size:56px; margin-bottom:6px; display:block;}
+  .gracias h2{
+    font-size:26px;
+    font-weight:800;
+    color:var(--violeta);
+    margin:0 0 8px;
+  }
+  .gracias p{
+    font-size:16px;
+    font-weight:600;
+    color:var(--texto);
+    margin:0;
+  }
+  .stickers{
+    margin-top:18px;
+    font-size:24px;
+    letter-spacing:6px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="tarjeta">
+    <div class="contenido">
+
+      <section id="pantalla-votar" class="pantalla">
+        <span class="emoji-top">🎃🕷️</span>
+        <h1>29° Cumple</h1>
+        <span class="subt">Fiesta de Disfraces</span>
+        <p class="lead">¿Cuál fue el disfraz que más te gustó? ¡Votalo! 👇</p>
+        <form id="form-voto">
+          <textarea
+            id="input-voto"
+            maxlength="80"
+            placeholder="Ej: la momia, Spiderman, el pirata..."
+            autocomplete="off"
+            required
+          ></textarea>
+          <div class="contador"><span id="contador-num">0</span>/80</div>
+          <button id="btn-votar" type="submit">Votar 🎉</button>
+          <div class="mensaje-error" id="mensaje-error"></div>
+        </form>
+      </section>
+
+      <section id="pantalla-gracias" class="pantalla gracias">
+        <span class="gracias-emoji">✅</span>
+        <h2>¡Ya votaste!</h2>
+        <p>Gracias por participar de la fiesta 🎉</p>
+        <div class="stickers">🪩🧟🏴‍☠️💀🧙</div>
+      </section>
+
+    </div>
+  </div>
+
+<script>
+  // Configurá acá la URL del Apps Script publicado como Web App (ver README).
+  const APPS_SCRIPT_URL = 'PON_AQUI_LA_URL_DEL_APPS_SCRIPT';
+
+  const TOKEN_KEY = 'voteToken';
+  const VOTED_KEY = 'voted';
+
+  function storageGet(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function storageSet(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  function getToken() {
+    let token = storageGet(TOKEN_KEY);
+    if (!token) {
+      token = crypto.randomUUID();
+      storageSet(TOKEN_KEY, token);
+    }
+    return token;
+  }
+
+  function mostrarPantalla(id) {
+    document.querySelectorAll('.pantalla').forEach(function (el) {
+      el.classList.remove('activa');
+    });
+    document.getElementById(id).classList.add('activa');
+  }
+
+  function init() {
+    getToken();
+    if (storageGet(VOTED_KEY) === 'true') {
+      mostrarPantalla('pantalla-gracias');
+    } else {
+      mostrarPantalla('pantalla-votar');
+    }
+  }
+
+  const form = document.getElementById('form-voto');
+  const input = document.getElementById('input-voto');
+  const contador = document.getElementById('contador-num');
+  const boton = document.getElementById('btn-votar');
+  const mensajeError = document.getElementById('mensaje-error');
+
+  input.addEventListener('input', function () {
+    contador.textContent = input.value.length;
+  });
+
+  function mostrarError(texto) {
+    mensajeError.textContent = texto;
+    mensajeError.classList.add('visible');
+  }
+
+  function ocultarError() {
+    mensajeError.classList.remove('visible');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const voto = input.value.trim();
+    if (!voto) return;
+
+    ocultarError();
+    boton.disabled = true;
+    boton.textContent = 'Enviando...';
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ token: getToken(), voto: voto })
+    })
+      .then(function (res) { return res.text(); })
+      .then(function (texto) {
+        const respuesta = texto.trim();
+        if (respuesta === 'ok') {
+          storageSet(VOTED_KEY, 'true');
+          mostrarPantalla('pantalla-gracias');
+        } else if (respuesta === 'duplicado') {
+          storageSet(VOTED_KEY, 'true');
+          mostrarPantalla('pantalla-gracias');
+        } else {
+          mostrarError('Uy, algo salió mal. Probá de nuevo en un toque 🙏');
+        }
+      })
+      .catch(function () {
+        mostrarError('No pudimos conectar. Revisá tu internet y probá de nuevo 📶');
+      })
+      .finally(function () {
+        boton.disabled = false;
+        boton.textContent = 'Votar 🎉';
+      });
+  });
+
+  init();
+</script>
+</body>
+</html>
