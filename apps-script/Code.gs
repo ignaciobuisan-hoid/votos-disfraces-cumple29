@@ -72,7 +72,7 @@ function responder(texto) {
 // A partir de ahí, cada vez que abrís la planilla se recalculan solos.
 
 var RESULTS_SHEET_NAME = 'Resultados';
-var GEMINI_MODEL = 'gemini-2.5-flash';
+var GEMINI_MODEL = 'gemini-3.8-flash';
 
 function onOpen() {
   SpreadsheetApp.getUi()
