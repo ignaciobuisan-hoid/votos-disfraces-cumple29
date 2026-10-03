@@ -133,24 +133,36 @@ function normalizarConGemini(votos) {
   var url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
     GEMINI_MODEL + ':generateContent?key=' + apiKey;
 
-  var res = UrlFetchApp.fetch(url, {
-    method: 'post',
-    contentType: 'application/json',
-    payload: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { responseMimeType: 'application/json' }
-    }),
-    muteHttpExceptions: true
+  var payload = JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { responseMimeType: 'application/json' }
   });
 
-  if (res.getResponseCode() !== 200) {
-    throw new Error('Gemini error ' + res.getResponseCode() + ': ' + res.getContentText());
-  }
+  var intentos = 3;
 
-  var body = JSON.parse(res.getContentText());
-  var resultados = JSON.parse(body.candidates[0].content.parts[0].text);
-  resultados.sort(function (a, b) { return b.votos - a.votos; });
-  return resultados;
+  for (var i = 0; i < intentos; i++) {
+    var res = UrlFetchApp.fetch(url, {
+      method: 'post',
+      contentType: 'application/json',
+      payload: payload,
+      muteHttpExceptions: true
+    });
+
+    var status = res.getResponseCode();
+    if (status === 200) {
+      var body = JSON.parse(res.getContentText());
+      var resultados = JSON.parse(body.candidates[0].content.parts[0].text);
+      resultados.sort(function (a, b) { return b.votos - a.votos; });
+      return resultados;
+    }
+
+    // 503 = modelo saturado (temporal): vale la pena reintentar. Otros errores no.
+    if (status !== 503 || i === intentos - 1) {
+      throw new Error('Gemini error ' + status + ': ' + res.getContentText());
+    }
+
+    Utilities.sleep(2000 * (i + 1)); // espera creciente: 2s, 4s
+  }
 }
 
 function escribirResultados(resultados) {
