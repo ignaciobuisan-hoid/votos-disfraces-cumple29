@@ -62,5 +62,44 @@ implementaciones → ícono de lápiz → en "Versión" elegí "Nueva versión" 
 ## Estructura del Sheet
 
 La hoja "Hoja 1" tiene los encabezados `timestamp | token | voto`. Cada voto
-agrega una fila nueva. Si votás dos veces con el mismo token, la segunda vez el
-script responde `duplicado` y no agrega fila.
+agrega una fila nueva, salvo que el token ya haya votado antes: en ese caso pisa
+su fila existente (ver "Cambiar mi voto" abajo).
+
+## Cambiar mi voto
+
+Si alguien ya votó, la pantalla "Ya votaste" tiene un botón "Cambiar mi voto ✏️"
+que lo vuelve a llevar al formulario (precargado con su voto anterior). Al
+reenviar, el Apps Script busca su token en la hoja y **pisa esa misma fila** en
+vez de crear una nueva — así nunca hay dos filas para el mismo token, pero la
+persona puede corregir su voto todas las veces que quiera.
+
+## Resultados normalizados con Gemini (pestaña "Resultados")
+
+El Apps Script incluye funciones para generar automáticamente, en una pestaña
+nueva "Resultados", el ranking de disfraces ordenado de más a menos votado,
+agrupando variantes de texto libre (typos, sinónimos, mayúsculas distintas) con
+la API de Gemini. Esto no se puede activar con integraciones — requiere dos
+pasos manuales, una sola vez:
+
+1. **Conseguir una API key de Gemini:** entrá a
+   [aistudio.google.com/apikey](https://aistudio.google.com/apikey), creá una
+   key (es gratis para este volumen de uso) y copiala.
+2. **Cargarla en el script:** en el editor de Apps Script (Extensiones →
+   Apps Script), ícono de **engranaje ⚙️ "Configuración del proyecto"** en el
+   menú de la izquierda → sección **"Propiedades del script"** → **"Añadir
+   propiedad del script"** → nombre `GEMINI_API_KEY`, valor tu key → Guardar.
+3. **Activar la actualización automática al abrir la hoja:** en el editor de
+   Apps Script, arriba, elegí la función `configurarAperturaAutomatica` en el
+   desplegable (al lado de "Depurar") y tocá **Ejecutar ▶**. Te va a pedir
+   autorizar permisos (acceso externo para llamar a Gemini) — aceptá. Esto se
+   hace una sola vez.
+
+Listo: de ahí en más, cada vez que abrís el Google Sheet se recalcula sola la
+pestaña "Resultados". También podés forzar una actualización manual en
+cualquier momento desde el menú **"🎭 Resultados disfraces" → "Actualizar
+ahora"** que aparece arriba del todo en el Sheet (al lado de Archivo, Edición,
+etc.) — útil si no querés esperar a cerrar y volver a abrir la hoja.
+
+Si editás `Code.gs` más adelante (por ejemplo para ajustar el prompt de
+normalización), acordate de subir **una nueva versión** del deployment como se
+explica arriba.

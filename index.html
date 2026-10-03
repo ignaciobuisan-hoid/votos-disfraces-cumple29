@@ -163,6 +163,19 @@
     font-size:24px;
     letter-spacing:6px;
   }
+  .btn-cambiar{
+    display:inline-block;
+    background:none;
+    border:none;
+    font-family:inherit;
+    color:var(--violeta);
+    font-size:14px;
+    font-weight:700;
+    text-decoration:underline;
+    margin-top:20px;
+    padding:6px;
+    cursor:pointer;
+  }
 </style>
 </head>
 <body>
@@ -194,6 +207,7 @@
         <h2>¡Ya votaste!</h2>
         <p>Gracias por participar de la fiesta 🎉</p>
         <div class="stickers">🪩🧟🏴‍☠️💀🧙</div>
+        <button type="button" id="btn-cambiar-voto" class="btn-cambiar">Cambiar mi voto ✏️</button>
       </section>
 
     </div>
@@ -205,6 +219,7 @@
 
   const TOKEN_KEY = 'voteToken';
   const VOTED_KEY = 'voted';
+  const LAST_VOTO_KEY = 'lastVoto';
 
   function storageGet(key) {
     try { return localStorage.getItem(key); } catch (e) { return null; }
@@ -243,6 +258,7 @@
   const contador = document.getElementById('contador-num');
   const boton = document.getElementById('btn-votar');
   const mensajeError = document.getElementById('mensaje-error');
+  const botonCambiar = document.getElementById('btn-cambiar-voto');
 
   input.addEventListener('input', function () {
     contador.textContent = input.value.length;
@@ -274,11 +290,9 @@
       .then(function (res) { return res.text(); })
       .then(function (texto) {
         const respuesta = texto.trim();
-        if (respuesta === 'ok') {
+        if (respuesta === 'ok' || respuesta === 'duplicado') {
           storageSet(VOTED_KEY, 'true');
-          mostrarPantalla('pantalla-gracias');
-        } else if (respuesta === 'duplicado') {
-          storageSet(VOTED_KEY, 'true');
+          storageSet(LAST_VOTO_KEY, voto);
           mostrarPantalla('pantalla-gracias');
         } else {
           mostrarError('Uy, algo salió mal. Probá de nuevo en un toque 🙏');
@@ -291,6 +305,15 @@
         boton.disabled = false;
         boton.textContent = 'Votar 🎉';
       });
+  });
+
+  botonCambiar.addEventListener('click', function () {
+    const anterior = storageGet(LAST_VOTO_KEY) || '';
+    input.value = anterior;
+    contador.textContent = anterior.length;
+    ocultarError();
+    mostrarPantalla('pantalla-votar');
+    input.focus();
   });
 
   init();
